@@ -391,14 +391,14 @@ export class Board {
     // Check if object is draggable (only external stacks)
     isDraggableObject(object) {
         // Check if it's an external stack group
-        if (object.userData && object.userData.isExternalStack) {
+        if (object.userData && (object.userData.isExternalStack || object.userData.isDraggable)) {
             return true;
         }
         
         // Check if parent is an external stack
         let parent = object.parent;
         while (parent) {
-            if (parent.userData && parent.userData.isExternalStack) {
+            if (parent.userData && (parent.userData.isExternalStack || parent.userData.isDraggable)) {
                 return true;
             }
             parent = parent.parent;
@@ -409,13 +409,13 @@ export class Board {
 
     // Get draggable stack from intersected object
     getDraggableStack(object) {
-        if (object.userData && object.userData.isExternalStack) {
+        if (object.userData && (object.userData.isExternalStack || object.userData.isDraggable)) {
             return object;
         }
         
         let parent = object.parent;
         while (parent) {
-            if (parent.userData && parent.userData.isExternalStack) {
+            if (parent.userData && (parent.userData.isExternalStack || parent.userData.isDraggable)) {
                 return parent;
             }
             parent = parent.parent;
