@@ -52,6 +52,7 @@ class HexaPlayableAd {
         const canvas = this.renderer.domElement;
         canvas.style.position = 'relative';
         canvas.style.zIndex = '10';
+        canvas.style.touchAction = 'none'; // Prevent default touch behaviors
         document.getElementById('game-container').appendChild(canvas);
         
         // Setup lighting

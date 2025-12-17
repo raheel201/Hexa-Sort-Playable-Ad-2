@@ -18,21 +18,26 @@ export class DragControls {
     bindEvents() {
         const canvas = document.querySelector('canvas');
         
+        // Mouse events
         canvas.addEventListener('mousedown', this.onPointerDown.bind(this));
-        canvas.addEventListener('mousemove', this.onPointerMove.bind(this));
-        canvas.addEventListener('mouseup', this.onPointerUp.bind(this));
+        document.addEventListener('mousemove', this.onPointerMove.bind(this));
+        document.addEventListener('mouseup', this.onPointerUp.bind(this));
 
+        // Touch events
         canvas.addEventListener('touchstart', this.onPointerDown.bind(this), { passive: false });
-        canvas.addEventListener('touchmove', this.onPointerMove.bind(this), { passive: false });
-        canvas.addEventListener('touchend', this.onPointerUp.bind(this));
+        document.addEventListener('touchmove', this.onPointerMove.bind(this), { passive: false });
+        document.addEventListener('touchend', this.onPointerUp.bind(this), { passive: false });
     }
 
     getPointerPosition(event) {
+        const canvas = document.querySelector('canvas');
+        const rect = canvas.getBoundingClientRect();
+        
         const clientX = event.clientX || (event.touches && event.touches[0]?.clientX) || 0;
         const clientY = event.clientY || (event.touches && event.touches[0]?.clientY) || 0;
         
-        this.pointer.x = (clientX / window.innerWidth) * 2 - 1;
-        this.pointer.y = -(clientY / window.innerHeight) * 2 + 1;
+        this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        this.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
     }
 
     onPointerDown(event) {
@@ -58,6 +63,7 @@ export class DragControls {
                     
                     // Lift the entire stack
                     stackGroup.position.y = 1;
+                    console.log('Started dragging stack');
                     break;
                 }
             }
