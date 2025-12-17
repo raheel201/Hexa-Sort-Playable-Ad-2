@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Hexa Sort - Play Now!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            overflow: hidden; 
+            background: linear-gradient(135deg, #87ceeb, #b0e0e6);
+            touch-action: none;
+        }
+        #game-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+        }
+        #cta-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #cta-button {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border: none;
+            padding: 20px 40px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        #game-title {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            border: 3px solid rgba(255,255,255,0.3);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="game-title">Hexa Sort</div>
+        <div id="cta-overlay">
+            <button id="cta-button">Play Full Game</button>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
