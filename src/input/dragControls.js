@@ -10,6 +10,7 @@ export class DragControls {
         
         this.draggedStack = null;
         this.isDragging = false;
+        this.onMove = null;
 
         this.bindEvents();
     }
@@ -111,6 +112,10 @@ export class DragControls {
         if (targetSlot) {
             // Valid drop - place stack
             this.board.placeDraggableStack(this.draggedStack, targetSlot);
+            // Trigger move callback
+            if (this.onMove) {
+                this.onMove();
+            }
         } else {
             // Invalid drop - return to original position
             const originalPos = this.draggedStack.userData.originalPosition;

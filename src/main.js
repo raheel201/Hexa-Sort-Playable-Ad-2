@@ -17,6 +17,9 @@ import { CTAOverlay } from './ui/ctaOverlay.js';
 // Utils
 import { setupResize } from './utils/resize.js';
 
+// Phaser UI implementation
+import { PhaserUIManager } from './phaser/PhaserGame.js';
+
 class HexaPlayableAd {
     constructor() {
         this.scene = null;
@@ -27,18 +30,29 @@ class HexaPlayableAd {
         this.ctaOverlay = null;
         this.hexGeometry = null;
         this.gameActive = true;
+        this.phaserUI = new PhaserUIManager();
+        this.moveCount = 0;
         
         this.init();
     }
 
     async init() {
+        // Create Phaser UI container
+        const phaserContainer = document.createElement('div');
+        phaserContainer.id = 'phaser-container';
+        phaserContainer.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;';
+        document.getElementById('game-container').appendChild(phaserContainer);
+        
         // Create core Three.js components
         this.scene = createScene();
         this.camera = createCamera();
         this.renderer = createRenderer();
         
         // Add renderer to DOM
-        document.getElementById('game-container').appendChild(this.renderer.domElement);
+        const canvas = this.renderer.domElement;
+        canvas.style.position = 'relative';
+        canvas.style.zIndex = '10';
+        document.getElementById('game-container').appendChild(canvas);
         
         // Setup lighting
         createLights(this.scene);
@@ -48,6 +62,11 @@ class HexaPlayableAd {
         
         // Initialize UI
         this.ctaOverlay = new CTAOverlay();
+        
+        // Initialize Phaser UI after Three.js canvas
+        setTimeout(() => {
+            this.phaserUI.init();
+        }, 100);
         
         // Load hexagon model and start game
         await this.loadHexagonModel();
@@ -102,12 +121,18 @@ class HexaPlayableAd {
         this.hexGeometry.rotateY(Math.PI / 6);
     }
 
+
+
     startGame() {
         // Create game board with loaded geometry
         this.board = new Board(this.scene, this.hexGeometry);
         
-        // Setup drag controls
+        // Setup drag controls with move tracking
         this.dragControls = new DragControls(this.camera, this.scene, this.board);
+        this.dragControls.onMove = () => {
+            this.moveCount++;
+            this.phaserUI.updateMoves(this.moveCount);
+        };
         
         // Start render loop
         this.animate();
@@ -121,6 +146,9 @@ class HexaPlayableAd {
             if (!this.gameActive) return;
             
             const mergeCount = this.board.getMergeCount();
+            
+            // Update UI with current score
+            this.phaserUI.updateScore(mergeCount * 100);
             
             // Show CTA after 1-2 successful merges (playable ad spec)
             if (mergeCount >= 1) {
