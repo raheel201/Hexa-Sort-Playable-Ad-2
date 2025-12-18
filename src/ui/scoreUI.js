@@ -23,6 +23,12 @@ export class ScoreUI {
             border: 3px solid rgba(255,255,255,0.3);
             z-index: 100;
         `;
+        
+        // Hide on mobile
+        if (window.innerWidth <= 768) {
+            this.scoreElement.style.display = 'none';
+        }
+        
         this.updateDisplay();
         document.body.appendChild(this.scoreElement);
     }

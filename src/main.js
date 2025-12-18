@@ -73,12 +73,11 @@ class HexaPlayableAd {
             loader.load(
                 '/models/hexagon.fbx',
                 (fbx) => {
-                    console.log('FBX loaded successfully');
                     this.processLoadedModel(fbx);
                     resolve();
                 },
                 (progress) => {
-                    console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+                    // Optional: handle progress updates
                 },
                 (error) => {
                     console.warn('FBX loading failed, using fallback geometry:', error);
@@ -172,6 +171,7 @@ class HexaPlayableAd {
     }
 
     animate() {
+        if (!this.gameActive) return;
         requestAnimationFrame(() => this.animate());
         
         if (this.renderer && this.scene && this.camera) {

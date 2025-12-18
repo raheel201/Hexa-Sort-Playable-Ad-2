@@ -51,11 +51,9 @@ export class DragControls {
         const intersects = this.raycaster.intersectObjects(this.scene.children, true);
         
         for (const intersect of intersects) {
-            console.log('Intersected object:', intersect.object.userData);
             // Check if this is a draggable external stack
             if (this.board.isDraggableObject(intersect.object)) {
                 const stackGroup = this.board.getDraggableStack(intersect.object);
-                console.log('Found draggable stack:', stackGroup);
                 if (stackGroup) {
                     this.draggedStack = stackGroup;
                     this.isDragging = true;
@@ -65,7 +63,6 @@ export class DragControls {
                     
                     // Lift the entire stack
                     stackGroup.position.y = 1;
-                    console.log('Started dragging stack');
                     break;
                 }
             }

@@ -70,11 +70,63 @@
             border: 3px solid rgba(255,255,255,0.3);
             z-index: 100;
         }
+        
+        #mobile-ui {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        #mobile-title {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            padding: 8px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.3);
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        #mobile-score {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 6px 15px;
+            display: inline-block;
+        }
+        
+        @media (max-width: 768px) {
+            #game-title {
+                display: none;
+            }
+            #mobile-ui {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
         <div id="game-title">Hexa Sort</div>
+        <div id="mobile-ui">
+            <div id="mobile-title">Hexa Sort</div>
+            <div id="mobile-score">Score: 0</div>
+        </div>
         <div id="cta-overlay">
             <button id="cta-button">Play Full Game</button>
         </div>

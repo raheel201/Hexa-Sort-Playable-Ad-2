@@ -14,7 +14,15 @@ const materials = [
 export class HexTile {
     constructor(geometry, color, position) {
         this.color = color; // Immutable color
-        this.mesh = new THREE.Mesh(geometry, materials[color]);
+        
+        // Scale geometry for mobile
+        const isMobile = window.innerWidth <= 768;
+        const scaledGeometry = geometry.clone();
+        if (isMobile) {
+            scaledGeometry.scale(0.58, 1, 0.58); // Scale to match mobile hex radius ratio (0.35/0.6)
+        }
+        
+        this.mesh = new THREE.Mesh(scaledGeometry, materials[color]);
         this.mesh.position.copy(position);
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;

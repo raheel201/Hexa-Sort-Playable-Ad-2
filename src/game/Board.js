@@ -16,6 +16,15 @@ export class Board {
         this.draggableStacks = [];
         this.ctaOverlay = new CTAOverlay();
         this.scoreUI = new ScoreUI();
+        
+        // Handle score UI visibility on resize
+        window.addEventListener('resize', () => {
+            const scoreElement = document.getElementById('score-display');
+            if (scoreElement) {
+                scoreElement.style.display = window.innerWidth <= 768 ? 'none' : 'block';
+            }
+        });
+        
         this.gameEnded = false;
         this.createBoard();
         this.setupInitialState();
@@ -23,7 +32,8 @@ export class Board {
 
     createBoard() {
         const positions = [];
-        const hexRadius = 0.6;
+        const isMobile = window.innerWidth <= 768;
+        const hexRadius = isMobile ? 0.35 : 0.6;
         const hexWidth = hexRadius * 2;
         const hexHeight = hexRadius * Math.sqrt(3);
         
@@ -44,7 +54,7 @@ export class Board {
             };
             this.slots.push(slot);
 
-            const slotGeo = new THREE.CylinderGeometry(0.6, 0.6, 0.05, 6);
+            const slotGeo = new THREE.CylinderGeometry(hexRadius, hexRadius, 0.05, 6);
             const slotMat = new THREE.MeshLambertMaterial({ 
                 color: 0x808080, 
                 transparent: true, 
@@ -59,7 +69,12 @@ export class Board {
     }
 
     createDraggableStacks() {
-        const dockPositions = [
+        const isMobile = window.innerWidth <= 768;
+        const dockPositions = isMobile ? [
+            { x: -0.7, z: 2.8 },
+            { x: 0, z: 2.8 },
+            { x: 0.7, z: 2.8 }
+        ] : [
             { x: -2, z: 4 },
             { x: 0, z: 4 },
             { x: 2, z: 4 }
@@ -236,7 +251,19 @@ export class Board {
         this.mergeCount++;
         
         // Add 100 points for each merged stack
-        this.scoreUI.addScore(100);
+        const isMobile = window.innerWidth <= 480;
+        if (!isMobile) {
+            this.scoreUI.addScore(100);
+        }
+        
+        // Update mobile score display only on mobile
+        if (isMobile) {
+            const mobileScore = document.getElementById('mobile-score');
+            if (mobileScore) {
+                const currentScore = parseInt(mobileScore.textContent.replace('Score: ', '')) || 0;
+                mobileScore.textContent = `Score: ${currentScore + 100}`;
+            }
+        }
 
         tilesToMerge.forEach((tile, i) => {
             setTimeout(() => {
@@ -366,13 +393,15 @@ export class Board {
     getNeighbors(slotId) {
         const neighbors = [];
         const slot = this.slots[slotId];
+        const isMobile = window.innerWidth <= 768;
+        const minDist = isMobile ? 0.4 : 0.8;
+        const maxDist = isMobile ? 0.8 : 1.2;
         
         for (let i = 0; i < this.slots.length; i++) {
             if (i === slotId) continue;
             
             const distance = slot.position.distanceTo(this.slots[i].position);
-            // Adjacent hexagons in this grid layout
-            if (distance > 0.8 && distance < 1.2) {
+            if (distance > minDist && distance < maxDist) {
                 neighbors.push(i);
             }
         }
